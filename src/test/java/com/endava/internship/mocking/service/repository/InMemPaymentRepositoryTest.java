@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,10 +33,10 @@ public class InMemPaymentRepositoryTest {
 
     @Test
     void findByIdTestNull() {
+
         assertThrows(
                 IllegalArgumentException.class,
-                () -> { paymentRepository.findById(null);},
-                "Payment id is not exists");
+                () -> { paymentRepository.findById(null);});
     }
 
     @Test
@@ -63,16 +64,15 @@ public class InMemPaymentRepositoryTest {
     void saveTestNullPayment() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> paymentRepository.save(null)
-                , "Payment is not exists");
+                () -> paymentRepository.save(null));
     }
 
     @Test
     void saveTestNonExistentId() {
         paymentRepository.save(payment1);
         assertThrows(IllegalArgumentException.class,
-                () -> paymentRepository.save(payment1),
-                ("id : " + payment1.getPaymentId() + "already saved before"));
+                () -> paymentRepository.save(payment1)
+                );
     }
 
     @Test
@@ -95,6 +95,6 @@ public class InMemPaymentRepositoryTest {
                 .isEqualTo(payment1);
 
         assertThat(paymentRepository.editMessage(payment1.getPaymentId(), "String").
-                getMessage()).isEqualTo("Message");
+                getMessage()).isEqualTo("String");
 }
 }

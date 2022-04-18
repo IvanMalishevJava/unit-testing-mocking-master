@@ -33,12 +33,6 @@ class PaymentServiceTest {
     @InjectMocks
     PaymentService paymentService;
 
-    @Captor
-    ArgumentCaptor<Integer> IntArgumentCaptor;
-
-    @Captor
-    ArgumentCaptor<Double> DoubleArgumentCaptor;
-
     @BeforeEach
     void setUp() {
     }
@@ -86,7 +80,6 @@ class PaymentServiceTest {
           first_payment,third_payment
         );
 
-        //Mockito.doReturn(paymentList).when(paymentRepository.findAll());
         when(paymentRepository.findAll()).thenReturn(paymentList);
 
         assertThat(paymentService.getAllByAmountExceeding(myAmount)).isEqualTo(returnList);
