@@ -46,7 +46,7 @@ public class InMemPaymentRepositoryTest {
         paymentRepository.save(payment1);
 
         assertTrue(paymentRepository.findById(id).isPresent());
-        assertThat(paymentRepository.findById(id).get()).isEqualTo(payment1);
+        assertThat(paymentRepository.findById(id)).contains(payment1);
     }
 
     @Test
