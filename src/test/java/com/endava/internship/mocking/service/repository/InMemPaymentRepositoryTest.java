@@ -33,10 +33,8 @@ public class InMemPaymentRepositoryTest {
 
     @Test
     void findByIdTestNull() {
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> { paymentRepository.findById(null);});
+        Throwable throwable = catchThrowable(() -> paymentRepository.findById(null));
+        assertThat(throwable).hasMessage("Payment id must not be null").isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -62,17 +60,16 @@ public class InMemPaymentRepositoryTest {
 
     @Test
     void saveTestNullPayment() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> paymentRepository.save(null));
+        Throwable throwable = catchThrowable(() -> paymentRepository.save(null));
+        assertThat(throwable).hasMessage("Payment must not be null").isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void saveTestNonExistentId() {
+    void saveTestAlreadyExistentId() {
         paymentRepository.save(payment1);
-        assertThrows(IllegalArgumentException.class,
-                () -> paymentRepository.save(payment1)
-                );
+
+        Throwable throwable = catchThrowable(() -> paymentRepository.save(payment1));
+        assertThat(throwable).hasMessage("Payment with id " + payment1.getPaymentId() + "already saved").isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -82,9 +79,10 @@ public class InMemPaymentRepositoryTest {
 
     @Test
     void editMessageTestNullPayment() {
-        assertThrows(NoSuchElementException.class, () -> {
-            paymentRepository.editMessage(payment1.getPaymentId(), "String");
-        });
+        UUID uuid = UUID.randomUUID();
+
+        Throwable throwable = catchThrowable(() -> paymentRepository.editMessage(uuid,"String"));
+        assertThat(throwable).hasMessage("Payment with id " + uuid + " not found").isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
